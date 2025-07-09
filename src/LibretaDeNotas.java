@@ -1,6 +1,7 @@
 import java.util.*;
 
 public class LibretaDeNotas {
+    //1.ATRIBUTOS Y CONTRUCTOR
     private HashMap<String, ArrayList<Double>> calificaciones;
     private HashMap<String, Double> promedios;
     private HashMap<String, Double> notasMaximas;
@@ -9,6 +10,12 @@ public class LibretaDeNotas {
     private final double NOTA_APROBACION = 4.0;
     private Scanner scanner;
 
+    // Calificaciones  : guarda el nombre del alumno y sus notas.
+    // promedios, notasMaximas, notasMinimas: guardan el promedio, nota máxima y mínima por estudiante.
+    // promedioGeneral: almacena el promedio de todo el curso.
+    // scanner: para leer datos desde la consola.
+
+
     public LibretaDeNotas() {
         calificaciones = new HashMap<>();
         promedios = new HashMap<>();
@@ -16,16 +23,33 @@ public class LibretaDeNotas {
         notasMinimas = new HashMap<>();
         scanner = new Scanner(System.in);
     }
+    //Inicializa todos los mapas y el scanner
 
+    //2.MÉTODO ejecutar()
     public void ejecutar() {
         System.out.println("=== EVALUADOR DE CLASES ===");
         ingresarDatos();
         calcularEstadisticas();
         mostrarMenu();
     }
+    //Este es el flujo principal:
+    //1.se ingresan los datos (ingresarDatos()).
+    //2.se calculan promedios y estad´siticas (calcularEstadisticas()).
+    //3.se muestra el menú interactivo (mostrarMenu()).
 
+    //3.INGRESO DE DATOS
     private void ingresarDatos() {
+        // Pide cuántos alumnos y cuántas notas ingresará
+        // Por cada alumno: nombre y notas
+
+        /* Este método:
+        * Pide el número de alumnos.
+        * Pide cuántas notas tendrá cada uno.
+        * Por cada alumno, guarda su nombre y sus notas en calificaciones.
+        Usa validarEnterosPositivo () y validarNota() para evitar errores */
+
         System.out.println("\n--- INGRESO DE DATOS ---");
+
 
         // Solicitar cantidad de alumnos
         int cantidadAlumnos = validarEnteroPositivo("Ingrese la cantidad de alumnos: ");
@@ -57,7 +81,16 @@ public class LibretaDeNotas {
         }
     }
 
+     //4.CÁLCULO DE ESTADÍSTICAS
     private void calcularEstadisticas() {
+        //recorre cada alumno, calcula su promedio, notas máx. nota min
+        //calcula el promedio general del curso
+
+        /* Alumno A {5,5 , 6,0 , 4,0]
+        * promedio: 5,17
+        * Máx: 6,0
+        * Min: 4,0 */
+
         double sumaPromedios = 0.0;
 
         for (Map.Entry<String, ArrayList<Double>> entry : calificaciones.entrySet()) {
@@ -86,10 +119,12 @@ public class LibretaDeNotas {
         promedioGeneral = sumaPromedios / calificaciones.size();
     }
 
+    //5.MENÚ DE OPCIONES
     private void mostrarMenu() {
         int opcion;
 
         do {
+            //Menú con 3 opciones: mostrar promedios, ver si nota aprueba, comparar con promedio del curso
             System.out.println("\n=== MENÚ DE OPCIONES ===");
             System.out.println("1. Mostrar el Promedio de Notas por Estudiante");
             System.out.println("2. Mostrar si la Nota es Aprobatoria o Reprobatoria por Estudiante");
@@ -117,8 +152,22 @@ public class LibretaDeNotas {
             }
         } while (opcion != 0);
     }
+    /* Opciones:
+    *Mostrar promedio de cada alumno : mostrarPromedios()
+    *Ver si una nota aprueba o no : evaluarNotaAperobatoria()
+    * Comparar una nota con el promedio del curso: compararConPromedioCurso()
+    * Salir
+     */
 
+    //6.MOSTRAR PROMEDIOS
     private void mostrarPromedios() {
+        //muestra el promedio, nota máx, min y estado de cada alumno
+
+        /* Este metodo:
+        * Recorre promedios, notasMaximas y notasMinimas.
+        * Imprime si el alumno está aprobado o no según NOTA_APROBACION.
+         */
+
         System.out.println("\n--- PROMEDIO DE NOTAS POR ESTUDIANTE ---");
         System.out.println("Promedio General del Curso: " + String.format("%.2f", promedioGeneral));
         System.out.println("Nota de Aprobación: " + NOTA_APROBACION);
@@ -139,7 +188,11 @@ public class LibretaDeNotas {
         }
     }
 
+    //7.EVALUAR SI UNA NOTA APRUEBA
     private void evaluarNotaAprobatoria() {
+        //Pide nombre del alumno y una nota
+        //Dice si esa nota es aprobatoria o no
+
         System.out.println("\n--- EVALUACIÓN DE NOTA APROBATORIA ---");
         String nombre = solicitarNombreEstudiante();
 
@@ -153,8 +206,17 @@ public class LibretaDeNotas {
             System.out.println("Nota de Aprobación: " + NOTA_APROBACION);
         }
     }
+//Nota: La evaluación no usa las notas guardadas, sino que la nota se ingresa manualmente.
 
+    //8.COMPARAR CON PROMEDIO DEL CURSO
     private void compararConPromedioCurso() {
+        // Pide una nota y compara con el promedio general del curso
+        /* Indica si la nota está:
+        *Por sobre
+        *Por debajo
+        *Igual al promedio general
+         */
+
         System.out.println("\n--- COMPARACIÓN CON PROMEDIO DEL CURSO ---");
         String nombre = solicitarNombreEstudiante();
 
@@ -188,7 +250,7 @@ public class LibretaDeNotas {
 
         return nombre;
     }
-
+    //9.VALIDACION DE ENTRADA
     private int validarEnteroPositivo(String mensaje) {
         int numero;
         do {
@@ -212,6 +274,8 @@ public class LibretaDeNotas {
     }
 
     private double validarNota(String mensaje) {
+        //evitan errores si el usuario ingresa texto, letras, o números inválidos.
+
         double nota;
         do {
             System.out.print(mensaje);
@@ -228,11 +292,11 @@ public class LibretaDeNotas {
         } while (nota < 1.0 || nota > 7.0);
         return nota;
     }
-
+    //10.MÉTODO
     public static void main(String[] args) {
         LibretaDeNotas libreta = new LibretaDeNotas();
         libreta.ejecutar();
     }
 }
-
+//este es el punto de partida. Crea un objeto de LibretaDeNotas y ejecuta el progrema.
 
